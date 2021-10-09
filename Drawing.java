@@ -32,31 +32,21 @@ public class Drawing extends Canvas {
         frame.pack();
         frame.setVisible(true);
         
-        // Variables
+        // Initialize Arrays
     	screenRoster = new int[screenLength];
     	numIterationsPerPixel = new int[max+1];
     	
-    	//Complex z = new Complex(7,8);
-    	//System.out.println(z.mult(z.sin()));
+    	//System.out.println();
     	
-    	//total = calculate(screenRoster, numIterationsPerPixel, max);
-    	
-    	zoom(canvas, 1);
+    	drawMandelbrot(canvas);
 	}
 	
-	public static void zoom(Canvas canvas, int iter) {
-		int g = iter + 1;
-		if (iter < 5) {
-			total = calculate(screenRoster, numIterationsPerPixel, max);
-			x0 = x0/2;
-			x1 = x1/2;
-			y0 = y0/2;
-			y1 = y1/2;
-			draw(canvas.getGraphics(), canvas, g );
-		}
+	public static void drawMandelbrot(Canvas canvas) {
+		total = calculate(screenRoster, numIterationsPerPixel, max);
+		draw(canvas.getGraphics());
 	}
 	
-	public static void draw(Graphics g, Canvas canvas, int iter) {
+	public static void draw(Graphics g) {
 	
     	// Draw Roster to Canvas
     	for(int i = 0; i < screenRoster.length; i++) {
@@ -82,8 +72,6 @@ public class Drawing extends Canvas {
     	}
         
     	System.out.println("Finished Drawing");
-    	
-    	zoom(canvas, iter);
     }
 	
 	public static int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
@@ -116,11 +104,6 @@ public class Drawing extends Canvas {
             //z = new Complex(Math.abs(z.real()), Math.abs(z.imaginary())).sqr().add(z0); // Burning Ship; Escape Radius: 2
             //z = z.cos().add(z0); // Escape Radius 10*PI
             //z = z.mult(z.sin());
-            
-            /*Complex a = z.cube().sub(1);
-            Complex b = z.sqr().mult(3);
-            Complex d = a.divi(b);
-            z = z.sub(d).add(z0);*/
         }
         return max;
 	}
