@@ -59,7 +59,7 @@ public class Drawing extends JPanel implements MouseListener {
     	for(int i = 0; i < screenRoster.length; i++) {
     		int x = i % screenWidth;
     		// Flip height because canvas draws with (0,0) in top left corner
-    		int y = i / screenWidth | 0;
+    		int y = screenWidth - (i / screenWidth | 0);
     		int iterations = screenRoster[i];
     		//System.out.println(iterations);
     		
@@ -92,12 +92,12 @@ public class Drawing extends JPanel implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		mouseLastX = e.getX();
-		mouseLastY = e.getY();
+		mouseLastY = screenWidth - e.getY();
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		updateArea(e.getX(), mouseLastX, e.getY(), mouseLastY);
+		updateArea(e.getX(), mouseLastX, screenWidth - e.getY(), mouseLastY);
 		repaint();
 	}
 	
@@ -129,8 +129,6 @@ public class Drawing extends JPanel implements MouseListener {
 		int nXEnd = nXStart + width;
 		int nYEnd = nYStart + width;
 		
-		System.out.println("x0: "+nXStart+" x1: "+nXEnd+"\ny0: "+nYStart+" y1: "+nYEnd);
-		
 		// Get percent values of position on screen
 		double xdiff = x1 - x0;
 		double ydiff = y1 - y0;
@@ -139,16 +137,12 @@ public class Drawing extends JPanel implements MouseListener {
 		double pYStart = ((double)nYStart / (double)screenHeight) * ydiff;
 		double pYEnd = ((double)nYEnd / (double)screenHeight) * ydiff;
 		
-		System.out.println("x0: "+pXStart+" x1: "+pXEnd+"\ny0: "+pYStart+" y1: "+pYEnd);
-		
 		// Set coordinates
 		x1 = pXEnd + x0;
 		x0 = pXStart + x0;
 		y1 = pYEnd + y0;
 		y0 = pYStart + y0;
-		
 
-		System.out.println("x0: "+x0+" x1: "+x1+"\ny0: "+y0+" y1: "+y1+"\nNew");
 		total = calculate(screenRoster, numIterationsPerPixel, max);
 	}
 	
