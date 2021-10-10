@@ -3,20 +3,29 @@ package graphics2D;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import javax.swing.JFrame;
+import java.awt.Dimension;
+
+import javax.swing.*;
+
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class Drawing extends Canvas {
+public class Drawing extends JPanel implements MouseListener {
 
-	static int screenWidth = 1000;
-	static int screenHeight = 1000;
-	static int screenLength = screenWidth*screenHeight;
+	static final int screenWidth = 1000;
+	static final int screenHeight = 1000;
+	static final int screenHalfWidth = screenWidth/2;
+	static final int screenHalfHeight = screenHeight/2;
+	static final int screenLength = screenWidth*screenHeight;
 	
-	static int max = 300;
+	static int max = 250;
 	static int[] screenRoster;
 	static int[] numIterationsPerPixel;
 	static double total;
+	
+	static int mouseLastX = 0;
+	static int mouseLastY = 0;
 	
 	static double x0 = -2, x1 = 2, y0 = -2, y1 = 2; //pattern 0
 	//static double x0 = -0.7092, x1 = -0.712, y0 = 0.24445, y1 = 0.2487; //pattern 1
@@ -26,9 +35,11 @@ public class Drawing extends Canvas {
 	public static void main(String[] args) {
 		// Generate Window
 		JFrame frame = new JFrame("Mandelbrot Set");
-        Canvas canvas = new Drawing();
-        canvas.setSize(screenWidth, screenHeight);
-        frame.add(canvas);
+        Drawing drawing = new Drawing();
+        drawing.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        drawing.addMouseListener(drawing);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(drawing);
         frame.pack();
         frame.setVisible(true);
         
@@ -38,19 +49,16 @@ public class Drawing extends Canvas {
     	
     	//System.out.println();
     	
-    	drawMandelbrot(canvas);
-	}
-	
-	public static void drawMandelbrot(Canvas canvas) {
+    	// Only calculate the image once to make it faster
 		total = calculate(screenRoster, numIterationsPerPixel, max);
-		draw(canvas.getGraphics());
+		//drawMandelbrot(canvas.getGraphics());
 	}
 	
-	public static void draw(Graphics g) {
-	
-    	// Draw Roster to Canvas
+	public static void drawMandelbrot(Graphics g) {
+		// Draw roster to canvas
     	for(int i = 0; i < screenRoster.length; i++) {
     		int x = i % screenWidth;
+    		// Flip height because canvas draws with (0,0) in top left corner
     		int y = i / screenWidth | 0;
     		int iterations = screenRoster[i];
     		//System.out.println(iterations);
@@ -71,8 +79,78 @@ public class Drawing extends Canvas {
     		}
     	}
         
-    	System.out.println("Finished Drawing");
+    	//System.out.println("Finished Drawing");
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		drawMandelbrot(g);
     }
+	
+	// Mouse Listener
+	@Override
+	public void mousePressed(MouseEvent e) {
+		mouseLastX = e.getX();
+		mouseLastY = e.getY();
+	}
+	
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		updateArea(e.getX(), mouseLastX, e.getY(), mouseLastY);
+		repaint();
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+	}
+	
+	// Mandelbrot Calculations
+	
+	public static void updateArea(int xstart, int xend, int ystart, int yend) {
+		// Correcting the order of the coordinates
+		int nXStart = Math.min(xstart, xend);
+		int nYStart = Math.min(ystart, yend);
+		
+		int width = Math.abs(xstart - xend);
+		int height = Math.abs(ystart - yend);
+		
+		int nXEnd = nXStart + width;
+		int nYEnd = nYStart + width;
+		
+		System.out.println("x0: "+nXStart+" x1: "+nXEnd+"\ny0: "+nYStart+" y1: "+nYEnd);
+		
+		// Get percent values of position on screen
+		double xdiff = x1 - x0;
+		double ydiff = y1 - y0;
+		double pXStart = ((double)nXStart / (double)screenWidth) * xdiff;
+		double pXEnd = ((double)nXEnd / (double)screenWidth) * xdiff;
+		double pYStart = ((double)nYStart / (double)screenHeight) * ydiff;
+		double pYEnd = ((double)nYEnd / (double)screenHeight) * ydiff;
+		
+		System.out.println("x0: "+pXStart+" x1: "+pXEnd+"\ny0: "+pYStart+" y1: "+pYEnd);
+		
+		// Set coordinates
+		x1 = pXEnd + x0;
+		x0 = pXStart + x0;
+		y1 = pYEnd + y0;
+		y0 = pYStart + y0;
+		
+
+		System.out.println("x0: "+x0+" x1: "+x1+"\ny0: "+y0+" y1: "+y1+"\nNew");
+		total = calculate(screenRoster, numIterationsPerPixel, max);
+	}
 	
 	public static int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
 		// Calculate Mandelbrot
