@@ -26,3 +26,4 @@ The work of Douady and Hubbard coincided with a huge increase in interest in com
 <img src="./mandelbrot-whole.png">
 <img src="./mandelbrot-zoom-1.png">
 <img src="./mandelbrot-zoom-2.png">
+<img src="./mandelbrot-zoom-3.png">
