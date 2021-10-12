@@ -15,6 +15,7 @@ public class Drawing extends JPanel implements MouseListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	static final int screenWidth = 1000;
 	static final int screenHeight = 1000;
 	static final int screenHalfWidth = screenWidth/2;
@@ -90,16 +91,20 @@ public class Drawing extends JPanel implements MouseListener {
 	// Mouse Listener
 	@Override
 	public void mousePressed(MouseEvent e) {
-		mouseLastX = e.getX();
-		mouseLastY = e.getY();
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			mouseLastX = e.getX();
+			mouseLastY = e.getY();
+		}
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		int x = e.getX();
-		int y = e.getY();
-		updateArea(x, mouseLastX, y, mouseLastY);
-		repaint();
+		if(e.getButton() == MouseEvent.BUTTON1) {
+			int x = e.getX();
+			int y = e.getY();
+			updateArea(x, mouseLastX, y, mouseLastY);
+			repaint();
+		}
 	}
 	
 	@Override
@@ -114,7 +119,10 @@ public class Drawing extends JPanel implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		if(e.getButton() == MouseEvent.BUTTON3) {
+			double xdif = x1-x0, ydif = y1-y0;
+			new Julia(new Complex(findPercentDiff(e.getX(), screenWidth, xdif) + x0, findPercentDiff(e.getY(), screenHeight, ydif)  + y0)).createWindow();
+		}
 	}
 	
 	// Mandelbrot Calculations
@@ -131,12 +139,12 @@ public class Drawing extends JPanel implements MouseListener {
 		int nYEnd = nYStart + width;
 		
 		// Get percent values of position on screen
-		double xdiff = x1 - x0;
-		double ydiff = y1 - y0;
-		double pXStart = ((double)nXStart / (double)screenWidth) * xdiff;
-		double pXEnd = ((double)nXEnd / (double)screenWidth) * xdiff;
-		double pYStart = ((double)nYStart / (double)screenHeight) * ydiff;
-		double pYEnd = ((double)nYEnd / (double)screenHeight) * ydiff;
+		double xdif = x1 - x0;
+		double ydif = y1 - y0;
+		double pXStart = findPercentDiff(nXStart, screenWidth, xdif);
+		double pXEnd = findPercentDiff(nXEnd, screenWidth, xdif);
+		double pYStart = findPercentDiff(nYStart, screenHeight, ydif);
+		double pYEnd = findPercentDiff(nYEnd, screenHeight, ydif);
 		
 		// Set coordinates
 		x1 = pXEnd + x0;
@@ -148,6 +156,11 @@ public class Drawing extends JPanel implements MouseListener {
 	}
 	
 	public static int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
+		// Reset array
+		for (int i = 0; i < numIterationsPerPixel.length; i++) {
+			numIterationsPerPixel[i] = 0;
+        }
+		
 		// Calculate Mandelbrot
 		double xdif = (x1-x0)/screenWidth, ydif = (y1-y0)/screenHeight;
 		for (int j = 0; j < screenHeight; j++) {
@@ -184,5 +197,8 @@ public class Drawing extends JPanel implements MouseListener {
 	public static int convert2Dto1D(int x, int y) {
 		return (y * screenWidth) + x;
 	}
-
+	
+	public static double findPercentDiff(int part, int max, double mod) {
+		return ((double)part / (double)max) * mod;
+	}
 }
