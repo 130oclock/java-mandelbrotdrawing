@@ -145,36 +145,36 @@ public class Drawing extends JPanel implements MouseListener {
 	
 	public static int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
 		// Calculate Mandelbrot
-    	double xdif = (x1-x0)/screenWidth, ydif = (y1-y0)/screenHeight;
-    	for (int j = 0; j < screenHeight; j++) {
-    		for (int i = 0; i < screenWidth; i++) {
-    			double x = x0 + (i * xdif), y = y0 + (j * ydif);
-	    		Complex z0 = new Complex(x, y);
-	    		int iterations = max - mand(z0, max);
-	    		screenRoster[convert2Dto1D(i, j)] = iterations;
-    		}
-    	}
+		double xdif = (x1-x0)/screenWidth, ydif = (y1-y0)/screenHeight;
+		for (int j = 0; j < screenHeight; j++) {
+			for (int i = 0; i < screenWidth; i++) {
+				double x = x0 + (i * xdif), y = y0 + (j * ydif);
+				Complex z0 = new Complex(x, y);
+				int iterations = max - mand(z0, max);
+				screenRoster[convert2Dto1D(i, j)] = iterations;
+			}
+		}
     	
-    	int total = 0;
-    	for (int i = 0; i < screenLength; i++) {
-    		numIterationsPerPixel[screenRoster[i]]++;
-    	}
-    	for (int i = 0; i < max; i++) {
-    		total += numIterationsPerPixel[i];
-    	}
-    	return total;
+		int total = 0;
+		for (int i = 0; i < screenLength; i++) {
+			numIterationsPerPixel[screenRoster[i]]++;
+		}
+		for (int i = 0; i < max; i++) {
+			total += numIterationsPerPixel[i];
+		}
+		return total;
 	}
 	
 	public static int mand(Complex z0, int max) {
 		Complex z = z0;
 		for (int t = 0; t < max; t++) {
-            if (z.mod() > 2.0) return t;
-            z = z.sqr().add(z0); // Mandelbrot; Escape Radius: 2
-            //z = new Complex(Math.abs(z.real()), Math.abs(z.imaginary())).sqr().add(z0); // Burning Ship; Escape Radius: 2
-            //z = z.cos().add(z0); // Escape Radius 10*PI
-            //z = z.mult(z.sin());
-        }
-        return max;
+			if (z.mod() > 2.0) return t;
+			z = z.sqr().add(z0); // Mandelbrot; Escape Radius: 2
+			//z = new Complex(Math.abs(z.real()), Math.abs(z.imaginary())).sqr().add(z0); // Burning Ship; Escape Radius: 2
+			//z = z.cos().add(z0); // Escape Radius 10*PI
+			//z = z.mult(z.sin());
+		}
+		return max;
 	}
 	
 	public static int convert2Dto1D(int x, int y) {
