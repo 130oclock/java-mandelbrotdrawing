@@ -1,13 +1,11 @@
 package graphics2D;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Dimension;
 
 import javax.swing.*;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -51,15 +49,14 @@ public class Drawing extends JPanel implements MouseListener {
     	
     	// Only calculate the image once to make it faster
 		total = calculate(screenRoster, numIterationsPerPixel, max);
-		//drawMandelbrot(canvas.getGraphics());
 	}
 	
 	public static void drawMandelbrot(Graphics g) {
 		// Draw roster to canvas
     	for(int i = 0; i < screenRoster.length; i++) {
     		int x = i % screenWidth;
-    		// Flip height because canvas draws with (0,0) in top left corner
-    		int y = screenWidth - (i / screenWidth | 0);
+    		int y = i / screenWidth | 0;
+    		
     		int iterations = screenRoster[i];
     		//System.out.println(iterations);
     		
@@ -71,7 +68,7 @@ public class Drawing extends JPanel implements MouseListener {
 	    		}
 	    		// draw pixel
 	    		int c = Math.max(0, 255 - (int)(255 * (hue / total)));
-	    		//int c = (int)(255 * ((double)iterations/(double)max));
+	    		//int c = 255 - (int)(255 * ((double)iterations/(double)max));
 	    		if (iterations == 0) c = 0;
 	    		Color color = new Color(c,c,c);
 	    		g.setColor(color);
@@ -92,12 +89,14 @@ public class Drawing extends JPanel implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		mouseLastX = e.getX();
-		mouseLastY = screenWidth - e.getY();
+		mouseLastY = e.getY();
 	}
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		updateArea(e.getX(), mouseLastX, screenWidth - e.getY(), mouseLastY);
+		int x = e.getX();
+		int y = e.getY();
+		updateArea(x, mouseLastX, y, mouseLastY);
 		repaint();
 	}
 	
