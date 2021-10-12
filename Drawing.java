@@ -33,19 +33,19 @@ public class Drawing extends JPanel implements MouseListener {
 	public static void main(String[] args) {
 		// Generate Window
 		JFrame frame = new JFrame("Mandelbrot Set");
-        Drawing drawing = new Drawing();
-        drawing.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        drawing.addMouseListener(drawing);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(drawing);
-        frame.pack();
-        frame.setVisible(true);
-        
-        // Initialize Arrays
-    	screenRoster = new int[screenLength];
-    	numIterationsPerPixel = new int[max+1];
+		Drawing drawing = new Drawing();
+		drawing.setPreferredSize(new Dimension(screenWidth, screenHeight));
+		drawing.addMouseListener(drawing);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.add(drawing);
+		frame.pack();
+		frame.setVisible(true);
+
+		// Initialize Arrays
+		screenRoster = new int[screenLength];
+		numIterationsPerPixel = new int[max+1];
     	
-    	// Only calculate the image once to make it faster
+		// Only calculate the image once to make it faster
 		total = calculate(screenRoster, numIterationsPerPixel, max);
 	}
 	
