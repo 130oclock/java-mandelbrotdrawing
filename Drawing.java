@@ -52,29 +52,29 @@ public class Drawing extends JPanel implements MouseListener {
 	public static void drawMandelbrot(Graphics g) {
 		// Draw roster to canvas
 		for(int i = 0; i < screenRoster.length; i++) {
-    		int x = i % screenWidth;
-    		int y = i / screenWidth | 0;
+			int x = i % screenWidth;
+			int y = i / screenWidth | 0;
     		
-    		int iterations = screenRoster[i];
-    		//System.out.println(iterations);
+			int iterations = screenRoster[i];
+			//System.out.println(iterations);
     		
-    		if (iterations <= max) {
-    			double hue = 0;
-	    		for (int j = 0; j <= iterations; j++) {
-	    			hue += (numIterationsPerPixel[j]);
-	        		//System.out.println(total);
-	    		}
-	    		// draw pixel
-	    		int c = Math.max(0, 255 - (int)(255 * (hue / total)));
-	    		//int c = 255 - (int)(255 * ((double)iterations/(double)max));
-	    		if (iterations == 0) c = 0;
-	    		Color color = new Color(c,c,c);
-	    		g.setColor(color);
-	    		g.fillRect(x,y,1,1);
-    		}
-    	}
+			if (iterations <= max) {
+				double hue = 0;
+				for (int j = 0; j <= iterations; j++) {
+					hue += (numIterationsPerPixel[j]);
+					//System.out.println(total);
+				}
+				// draw pixel
+				int c = Math.max(0, 255 - (int)(255 * (hue / total)));
+				//int c = 255 - (int)(255 * ((double)iterations/(double)max));
+				if (iterations == 0) c = 0;
+				Color color = new Color(c,c,c);
+				g.setColor(color);
+				g.fillRect(x,y,1,1);
+			}
+		}
         
-    	//System.out.println("Finished Drawing");
+		//System.out.println("Finished Drawing");
 	}
 	
 	@Override
