@@ -51,7 +51,7 @@ public class Drawing extends JPanel implements MouseListener {
 	
 	public static void drawMandelbrot(Graphics g) {
 		// Draw roster to canvas
-    	for(int i = 0; i < screenRoster.length; i++) {
+		for(int i = 0; i < screenRoster.length; i++) {
     		int x = i % screenWidth;
     		int y = i / screenWidth | 0;
     		
