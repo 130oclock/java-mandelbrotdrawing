@@ -11,6 +11,10 @@ import java.awt.event.MouseListener;
 
 public class Drawing extends JPanel implements MouseListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static final int screenWidth = 1000;
 	static final int screenHeight = 1000;
 	static final int screenHalfWidth = screenWidth/2;
@@ -121,7 +125,7 @@ public class Drawing extends JPanel implements MouseListener {
 		int nYStart = Math.min(ystart, yend);
 		
 		int width = Math.abs(xstart - xend);
-		int height = Math.abs(ystart - yend);
+		//int height = Math.abs(ystart - yend);
 		
 		int nXEnd = nXStart + width;
 		int nYEnd = nYStart + width;
