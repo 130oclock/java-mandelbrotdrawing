@@ -21,9 +21,11 @@ The work of Douady and Hubbard coincided with a huge increase in interest in com
 
 Read more at ([https://en.wikipedia.org/wiki/Mandelbrot_set](https://en.wikipedia.org/wiki/Mandelbrot_set))
 
-### Examples
+### Examples of Mandelbrot Images
 <img src="./mandelbrot-whole.png">
 <img src="./mandelbrot-zoom-1.png">
 <img src="./mandelbrot-zoom-2.png">
 <img src="./mandelbrot-zoom-3.png">
+
+### Examples of Julia Set Images
 <img src="./julia-1.png">
