@@ -45,8 +45,6 @@ public class Drawing extends JPanel implements MouseListener {
     	screenRoster = new int[screenLength];
     	numIterationsPerPixel = new int[max+1];
     	
-    	//System.out.println();
-    	
     	// Only calculate the image once to make it faster
 		total = calculate(screenRoster, numIterationsPerPixel, max);
 	}
