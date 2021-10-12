@@ -1,4 +1,4 @@
-package graphics2D;
+package mandelbrot;
 
 public class Complex {
 	private final double re, im;

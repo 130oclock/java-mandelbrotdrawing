@@ -1,4 +1,4 @@
-package graphics2D;
+package mandelbrot;
 
 import java.awt.Color;
 import java.awt.Graphics;
