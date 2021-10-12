@@ -55,17 +55,14 @@ public class Julia extends JPanel {
 			int y = i / screenWidth | 0;
     		
 			int iterations = screenRoster[i];
-			//System.out.println(iterations);
     		
 			if (iterations <= max) {
 				double hue = 0;
 				for (int j = 0; j <= iterations; j++) {
 					hue += (numIterationsPerPixel[j]);
-					//System.out.println(total);
 				}
 				// draw pixel
 				int c = Math.max(0, 255 - (int)(255 * (hue / total)));
-				//int c = 255 - (int)(255 * ((double)iterations/(double)max));
 				if (iterations == 0) c = 0;
 				Color color = new Color(c,c,c);
 				g.setColor(color);
