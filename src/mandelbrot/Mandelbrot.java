@@ -34,6 +34,7 @@ public class Mandelbrot {
 	}
 	
 	public void drawMandelbrot(Graphics g) {
+		if (screenRoster == null) return;
 		// Draw roster to canvas
 			for(int i = 0; i < screenRoster.length; i++) {
 				int x = i % screenWidth;

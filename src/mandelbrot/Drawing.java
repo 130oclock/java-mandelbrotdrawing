@@ -21,7 +21,7 @@ public class Drawing extends JPanel implements MouseListener {
 	static final int screenHalfHeight = screenHeight/2;
 	static final int screenLength = screenWidth*screenHeight;
 	
-	static int max = 250;
+	static int max = 500;
 	
 	static Mandelbrot mandel;
 	
@@ -52,8 +52,7 @@ public class Drawing extends JPanel implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		//drawMandelbrot(g);
-		if (mandel != null && mandel.screenRoster != null) mandel.drawMandelbrot(g);
+		if (mandel != null) mandel.drawMandelbrot(g);
     }
 	
 	// Mouse Listener
@@ -124,6 +123,7 @@ public class Drawing extends JPanel implements MouseListener {
 		mandel.x1 = x1;
 		mandel.y0 = y0;
 		mandel.y1 = y1;
+		
 		mandel.calculate();
 	}
 	
