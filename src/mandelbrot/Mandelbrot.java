@@ -10,13 +10,18 @@ public class Mandelbrot {
 	public int x0, x1, y0, y1;
 	
 	public Mandelbrot(int screenWidth, int screenHeight, int x0, int x1, int y0, int y1, int max) {
-		screenWidth = screenWidth;
-		screenHeight = screenHeight;
+		this.screenWidth = screenWidth;
+		this.screenHeight = screenHeight;
 		screenHalfWidth = screenWidth/2;
 		screenHalfHeight = screenHeight/2;
 		screenLength = screenWidth * screenHeight;
 		
-		max = max;
+		this.max = max;
+		
+		this.x0 = x0;
+		this.y0 = y0;
+		this.x1 = x1;
+		this.y1 = y1;
 		
 		screenRoster = new int[screenLength];
 		numIterationsPerPixel = new int[max+1];
