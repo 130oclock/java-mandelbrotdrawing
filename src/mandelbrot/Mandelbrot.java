@@ -1,63 +1,63 @@
 package mandelbrot;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class Mandelbrot {
 	
-	public int[] screenRoster, numIterationsPerPixel;
+	public int[] screenRoster;
+	public int[] numIterationsPerPixel;
 	public int screenWidth, screenHeight;
-	private int screenHalfWidth, screenHalfHeight, screenLength, max;
+	private int screenLength, max;
 	private double total;
 	
-	public int x0, x1, y0, y1;
+	public double x0, x1, y0, y1;
 	
-	public Mandelbrot(int screenWidth, int screenHeight, int x0, int x1, int y0, int y1, int max) {
+	public Mandelbrot(int screenWidth, int screenHeight, double x0, double x1, double y0, double y1, int max) {
+		// Set and initialize variables
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		screenHalfWidth = screenWidth/2;
-		screenHalfHeight = screenHeight/2;
 		screenLength = screenWidth * screenHeight;
 		
 		this.max = max;
 		
 		this.x0 = x0;
-		this.y0 = y0;
 		this.x1 = x1;
+		this.y0 = y0;
 		this.y1 = y1;
 		
 		screenRoster = new int[screenLength];
 		numIterationsPerPixel = new int[max+1];
 		
-		total = calculate(screenRoster, numIterationsPerPixel, max);
+		// Calculate and store the image once at the beginning
+		calculate();
 	}
 	
 	public void drawMandelbrot(Graphics g) {
 		// Draw roster to canvas
-		for(int i = 0; i < screenRoster.length; i++) {
-			int x = i % screenWidth;
-			int y = i / screenWidth | 0;
-    		
-			int iterations = screenRoster[i];
-    		
-			if (iterations <= max) {
-				double hue = 0;
-				for (int j = 0; j <= iterations; j++) {
-					hue += (numIterationsPerPixel[j]);
+			for(int i = 0; i < screenRoster.length; i++) {
+				int x = i % screenWidth;
+				int y = i / screenWidth | 0;
+	    		
+				int iterations = screenRoster[i];
+	    		
+				if (iterations <= max) {
+					double hue = 0;
+					for (int j = 0; j <= iterations; j++) {
+						hue += (numIterationsPerPixel[j]);
+					}
+					// Calculate color of pixel
+					int c = Math.max(0, 255 - (int)(255 * (hue / total)));
+					if (iterations == 0) c = 0;
+					Color color = new Color(c,c,c);
+					// Draw pixel
+					g.setColor(color);
+					g.fillRect(x,y,1,1);
 				}
-				// draw pixel
-				int c = Math.max(0, 255 - (int)(255 * (hue / total)));
-				if (iterations == 0) c = 0;
-				Color color = new Color(c,c,c);
-				g.setColor(color);
-				g.fillRect(x,y,1,1);
 			}
-		}
 	}
 	
-	private int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
-		// Reset array
-		for (int i = 0; i < numIterationsPerPixel.length; i++) {
-			numIterationsPerPixel[i] = 0;
-        }
-		
+	public void calculate() {
 		// Calculate Mandelbrot
 		double xdif = (x1-x0)/screenWidth, ydif = (y1-y0)/screenHeight;
 		for (int j = 0; j < screenHeight; j++) {
@@ -69,21 +69,23 @@ public class Mandelbrot {
 			}
 		}
     	
-		int total = 0;
+		total = 0;
 		for (int i = 0; i < screenLength; i++) {
 			numIterationsPerPixel[screenRoster[i]]++;
 		}
 		for (int i = 0; i < max; i++) {
 			total += numIterationsPerPixel[i];
 		}
-		return total;
 	}
 	
 	private int mand(Complex z0, int max) {
 		Complex z = z0;
 		for (int t = 0; t < max; t++) {
 			if (z.mod() > 2.0) return t;
-			z = z.sqr().add(this.c); 
+			z = z.sqr().add(z0); // Mandelbrot; Escape Radius: 2
+			//z = new Complex(Math.abs(z.real()), Math.abs(z.imaginary())).sqr().add(z0); // Burning Ship; Escape Radius: 2
+			//z = z.cos().add(z0); // Escape Radius 10*PI
+			//z = z.mult(z.sin());
 		}
 		return max;
 	}

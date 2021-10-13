@@ -1,6 +1,14 @@
 package mandelbrot;
 
-class DrawThread extends Runnable {
+import java.awt.Color;
+import java.awt.Graphics;
+
+class DrawThread implements Runnable {
+	
+	public int[] screenRoster, numIterationsPerPixel;
+	public int screenWidth, screenHeight;
+	private int screenHalfWidth, screenHalfHeight, screenLength, max;
+	private double total;
 	
 	private int x0, x1, y0, y1;
 	
@@ -9,8 +17,6 @@ class DrawThread extends Runnable {
 		this.y0 = y0;
 		this.x1 = x1;
 		this.y1 = y1;
-		
-		
 	}
 	
 	@Override
@@ -73,7 +79,7 @@ class DrawThread extends Runnable {
 		Complex z = z0;
 		for (int t = 0; t < max; t++) {
 			if (z.mod() > 2.0) return t;
-			z = z.sqr().add(this.c); 
+			z = z.sqr().add(z0); 
 		}
 		return max;
 	}
