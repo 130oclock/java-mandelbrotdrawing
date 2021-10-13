@@ -77,7 +77,7 @@ public class Julia extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawMandelbrot(g);
-    }
+    	}
 	
 	public int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
 		// Reset array
