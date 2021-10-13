@@ -16,6 +16,8 @@ public class Mandelbrot {
 		screenHalfHeight = screenHeight/2;
 		screenLength = screenWidth * screenHeight;
 		
+		max = max;
+		
 		screenRoster = new int[screenLength];
 		numIterationsPerPixel = new int[max+1];
 		
