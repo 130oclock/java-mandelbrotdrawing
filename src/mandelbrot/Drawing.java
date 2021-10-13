@@ -27,13 +27,15 @@ public class Drawing extends JPanel implements MouseListener {
 	static int[] numIterationsPerPixel;
 	static double total;
 	
-	static int mouseLastX = 0;
-	static int mouseLastY = 0;
+	static Mandelbrot mandel;
 	
 	static double x0 = -2, x1 = 2, y0 = -2, y1 = 2; //pattern 0
 	//static double x0 = -0.7092, x1 = -0.712, y0 = 0.24445, y1 = 0.2487; //pattern 1
 	//static double x0 = -0.777120613150274923773, x1 = -0.777120273471042550002, y0 = 0.126857111509958518545, y1 = 0.126857366062765260933; //pattern 2
 	//static double x0 = -0.741536187499999998982, x1 = -0.733203562499999999338, y0 = 0.188327906250000000015, y1 = 0.194577375000000000015; //pattern 3
+	
+	static int mouseLastX = 0;
+	static int mouseLastY = 0;
 	
 	public static void main(String[] args) {
 		// Generate Window
@@ -46,12 +48,16 @@ public class Drawing extends JPanel implements MouseListener {
 		frame.pack();
 		frame.setVisible(true);
 
+		/*
 		// Initialize Arrays
 		screenRoster = new int[screenLength];
 		numIterationsPerPixel = new int[max+1];
     	
 		// Only calculate the image once to make it faster
 		total = calculate(screenRoster, numIterationsPerPixel, max);
+		*/
+		
+		mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
 	}
 	
 	public static void drawMandelbrot(Graphics g) {
@@ -85,7 +91,8 @@ public class Drawing extends JPanel implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		drawMandelbrot(g);
+		//drawMandelbrot(g);
+		mandel.drawMandelbrot(g);
     }
 	
 	// Mouse Listener
