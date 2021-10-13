@@ -1,6 +1,6 @@
 package mandelbrot;
 
-class DrawThread extends Thread {
+class DrawThread extends Runnable {
 	
 	private int x0, x1, y0, y1;
 	
@@ -13,6 +13,7 @@ class DrawThread extends Thread {
 		
 	}
 	
+	@Override
 	public void run() {
 		
 	}
