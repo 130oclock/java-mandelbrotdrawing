@@ -47,7 +47,7 @@ public class Mandelbrot {
 		}
 	}
 	
-	public int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
+	private int calculate(int[] screenRoster, int[] numIterationsPerPixel, int max) {
 		// Reset array
 		for (int i = 0; i < numIterationsPerPixel.length; i++) {
 			numIterationsPerPixel[i] = 0;
@@ -74,7 +74,7 @@ public class Mandelbrot {
 		return total;
 	}
 	
-	public int mand(Complex z0, int max) {
+	private int mand(Complex z0, int max) {
 		Complex z = z0;
 		for (int t = 0; t < max; t++) {
 			if (z.mod() > 2.0) return t;
@@ -83,7 +83,7 @@ public class Mandelbrot {
 		return max;
 	}
 	
-	public int convert2Dto1D(int x, int y) {
+	private int convert2Dto1D(int x, int y) {
 		return (y * screenWidth) + x;
 	}
 }
