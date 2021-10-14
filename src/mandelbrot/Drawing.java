@@ -90,6 +90,13 @@ public class Drawing extends JPanel implements MouseListener {
 			double xdif = x1-x0, ydif = y1-y0;
 			new Julia(new Complex(findPercentDiff(e.getX(), screenWidth, xdif) + x0, findPercentDiff(e.getY(), screenHeight, ydif)  + y0)).createWindow();
 		}
+		if(e.getButton() == MouseEvent.BUTTON2) {
+			x0 = -2; x1 = 2; y0 = -2; y1 = 2;
+			mandel.setArea(x0, x1, y0, y1);
+
+			mandel.calculate();
+			repaint();
+		}
 	}
 	
 	// Mandelbrot Calculations
@@ -118,12 +125,8 @@ public class Drawing extends JPanel implements MouseListener {
 		x0 = pXStart + x0;
 		y1 = pYEnd + y0;
 		y0 = pYStart + y0;
-		
-		mandel.x0 = x0;
-		mandel.x1 = x1;
-		mandel.y0 = y0;
-		mandel.y1 = y1;
-		
+
+		mandel.setArea(x0, x1, y0, y1);
 		mandel.calculate();
 	}
 	

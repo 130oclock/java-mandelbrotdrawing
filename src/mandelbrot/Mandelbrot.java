@@ -33,6 +33,13 @@ public class Mandelbrot {
 		calculate();
 	}
 	
+	public void setArea(double x0, double x1, double y0, double y1) {
+		this.x0 = x0;
+		this.x1 = x1;
+		this.y0 = y0;
+		this.y1 = y1;
+	}
+	
 	public void drawMandelbrot(Graphics g) {
 		if (screenRoster == null) return;
 		// Draw roster to canvas
@@ -59,6 +66,10 @@ public class Mandelbrot {
 	}
 	
 	public void calculate() {
+		// Reset array
+		for (int i = 0; i < numIterationsPerPixel.length; i++) {
+			numIterationsPerPixel[i] = 0;
+        }
 		// Calculate Mandelbrot
 		double xdif = (x1-x0)/screenWidth, ydif = (y1-y0)/screenHeight;
 		for (int j = 0; j < screenHeight; j++) {
