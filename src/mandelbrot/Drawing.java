@@ -138,6 +138,7 @@ public class Drawing extends JPanel implements MouseListener {
 		int patchHeight = screenHeight / patchDiv;
 		
 		int totalPatches = (patchDiv + 1) * (patchDiv + 1);
+		threadPatches = new boolean[totalPatches];
 		double[] patchXY = new double[totalPatches * 2];
 		
 		for (int j = 0; j <= patchDiv; j++) {
@@ -153,7 +154,7 @@ public class Drawing extends JPanel implements MouseListener {
 	public static assignThreads(int numOfThreads) {
 		double[] patches = calculateThreadPatch();
 		for (int i = 0; i < numOfThreads; i++) {
-			DrawThread thread = new DrawThread(patches);
+			DrawThread thread = new DrawThread(patches, threadPatches);
 		}
 	}
 	
