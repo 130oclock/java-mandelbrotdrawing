@@ -137,7 +137,7 @@ public class Drawing extends JPanel implements MouseListener {
 		int patchWidth = screenWidth / patchDiv;
 		int patchHeight = screenHeight / patchDiv;
 		
-		int totalPatches = (patchDiv + 1) * (patchDiv + 1);
+		int totalPatches = (patchDiv) * (patchDiv);
 		threadPatches = new boolean[totalPatches];
 		double[] patchXY = new double[totalPatches * 2];
 		
