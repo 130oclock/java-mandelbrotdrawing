@@ -63,15 +63,42 @@ class DrawThread implements Runnable {
 		y1 = pYEnd + y0;
 		y0 = pYStart + y0;
 		
-		Mandelbrot mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
+		Mandelbrot mandel = new Mandelbrot(patchWidth, patchHeight, x0, x1, y0, y1, max);
 		draw(mandel, graphic, px0, py0, px1, py1);
 	}
 	
 	private void draw(Mandelbrot mandel, Graphics g, int px0, int py0, int px1, int py1) {
+		mandel.calculate();
+		mandel.screenRoster;
+		mandel.numIterationsPerPixel;
 		
+		for (int y = py0; y < py1; y++) {
+			for (int x = px0; x < px1; x++) {
+				int i = convert2Dto1D(x, y);
+				int iterations = screenRoster[i];
+	    		
+				if (iterations <= max) {
+					double hue = 0;
+					for (int j = 0; j <= iterations; j++) {
+						hue += (numIterationsPerPixel[j]);
+					}
+					// Calculate color of pixel
+					int c = Math.max(0, 255 - (int)(255 * (hue / total)));
+					if (iterations == 0) c = 0;
+					Color color = new Color(c,c,c);
+					// Draw pixel
+					g.setColor(color);
+					g.fillRect(x,y,1,1);
+				}
+			}
+		}
 	}
 	
-	public static double findPercentDiff(int part, int max, double mod) {
+	private static double findPercentDiff(int part, int max, double mod) {
 		return ((double)part / (double)max) * mod;
+	}
+	
+	private int convert2Dto1D(int x, int y) {
+		return (y * screenWidth) + x;
 	}
 }
