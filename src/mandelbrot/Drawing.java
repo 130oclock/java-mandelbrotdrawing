@@ -154,7 +154,7 @@ public class Drawing extends JPanel implements MouseListener {
 	public static assignThreads(int numOfThreads, Graphics g) {
 		double[] patches = calculateThreadPatch();
 		for (int i = 0; i < numOfThreads; i++) {
-			DrawThread thread = new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g);
+			DrawThread thread = new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, x0, y0, x1, y1);
 		}
 	}
 	
