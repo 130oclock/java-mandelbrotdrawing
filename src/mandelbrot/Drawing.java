@@ -24,6 +24,7 @@ public class Drawing extends JPanel implements MouseListener {
 	static int max = 500;
 	
 	static Mandelbrot mandel;
+	static boolean[] threadPatches;
 	
 	static double x0 = -2, x1 = 2, y0 = -2, y1 = 2; //pattern 0
 	//static double x0 = -0.7092, x1 = -0.712, y0 = 0.24445, y1 = 0.2487; //pattern 1
@@ -130,7 +131,37 @@ public class Drawing extends JPanel implements MouseListener {
 		mandel.calculate();
 	}
 	
+	// Thread Calculations
+	public static calculateThreadPatch() {
+		int patchDiv = 10;
+		int patchWidth = screenWidth / patchDiv;
+		int patchHeight = screenHeight / patchDiv;
+		
+		int totalPatches = (patchDiv + 1) * (patchDiv + 1);
+		double[] patchXY = new double[totalPatches * 2];
+		
+		for (int j = 0; j <= patchDiv; j++) {
+			for (int i = 0; i <= patchDiv; i++) {
+				int k = convert2Dto1D(i, j) * 2;
+				patchXY[k] = i * patchWidth;
+				patchXY[k+1] = j * patchHeight;
+			}
+		}
+		return patchXY;
+	}
+	
+	public static assignThreads(int numOfThreads) {
+		double[] patches = calculateThreadPatch();
+		for (int i = 0; i < numOfThreads; i++) {
+			DrawThread thread = new DrawThread(patches);
+		}
+	}
+	
 	public static double findPercentDiff(int part, int max, double mod) {
 		return ((double)part / (double)max) * mod;
+	}
+	
+	private int convert2Dto1D(int x, int y) {
+		return (y * screenWidth) + x;
 	}
 }
