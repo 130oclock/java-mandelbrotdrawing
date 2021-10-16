@@ -47,13 +47,15 @@ public class Drawing extends JPanel implements MouseListener {
 		
 		// Create Mandelbrot
 		mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
-		mandel.drawMandelbrot(drawing.getGraphics());
+		//mandel.drawMandelbrot(drawing.getGraphics());
+		assignThreads(4, drawing.getGraphics());
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (mandel != null) mandel.drawMandelbrot(g);
+		//if (mandel != null) mandel.drawMandelbrot(g);
+		if (mandel != null) assignThreads(4, g);
     }
 	
 	// Mouse Listener
@@ -132,18 +134,18 @@ public class Drawing extends JPanel implements MouseListener {
 	}
 	
 	// Thread Calculations
-	public static calculateThreadPatch() {
+	public static int[] calculateThreadPatch() {
 		int patchDiv = 10;
 		int patchWidth = screenWidth / patchDiv;
 		int patchHeight = screenHeight / patchDiv;
 		
 		int totalPatches = (patchDiv) * (patchDiv);
 		threadPatches = new boolean[totalPatches];
-		double[] patchXY = new double[totalPatches * 2];
+		int[] patchXY = new int[totalPatches * 2];
 		
-		for (int j = 0; j <= patchDiv; j++) {
-			for (int i = 0; i <= patchDiv; i++) {
-				int k = convert2Dto1D(i, j) * 2;
+		for (int j = 0; j < patchDiv; j++) {
+			for (int i = 0; i < patchDiv; i++) {
+				int k = (j * patchDiv + i) * 2;
 				patchXY[k] = i * patchWidth;
 				patchXY[k+1] = j * patchHeight;
 			}
@@ -151,18 +153,15 @@ public class Drawing extends JPanel implements MouseListener {
 		return patchXY;
 	}
 	
-	public static assignThreads(int numOfThreads, Graphics g) {
-		double[] patches = calculateThreadPatch();
+	public static void assignThreads(int numOfThreads, Graphics g) {
+		int[] patches = calculateThreadPatch();
+		//for (int j = 0; j < patches.length; j++) System.out.println(patches[j]);
 		for (int i = 0; i < numOfThreads; i++) {
-			DrawThread thread = new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, x0, y0, x1, y1);
+			new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, x0, y0, x1, y1).start();
 		}
 	}
 	
 	public static double findPercentDiff(int part, int max, double mod) {
 		return ((double)part / (double)max) * mod;
-	}
-	
-	private int convert2Dto1D(int x, int y) {
-		return (y * screenWidth) + x;
 	}
 }

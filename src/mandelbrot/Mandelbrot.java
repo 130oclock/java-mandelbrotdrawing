@@ -9,7 +9,7 @@ public class Mandelbrot {
 	public int[] numIterationsPerPixel;
 	public int screenWidth, screenHeight;
 	private int screenLength, max;
-	private double total;
+	public double total;
 	
 	public double x0, x1, y0, y1;
 	
