@@ -15,8 +15,9 @@ class DrawThread extends Thread {
 	private int[] patches;
 	private boolean[] threadPatches;
 	private Graphics graphic;
+	private Mandelbrot omandel;
 	
-	public DrawThread(int screenWidth, int screenHeight, int max, int[] patches, boolean[] threadPatches, Graphics g, double x0, double y0, double x1, double y1) {
+	public DrawThread(int screenWidth, int screenHeight, int max, int[] patches, boolean[] threadPatches, Graphics g, Mandelbrot omandel, double x0, double y0, double x1, double y1) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
 		this.max = max;
@@ -24,12 +25,13 @@ class DrawThread extends Thread {
 		this.patches = patches;
 		this.threadPatches = threadPatches;
 		this.graphic = g;
+		this.omandel = omandel;
 		
 		this.x0o = x0;
 		this.y0o = y0;
 		this.x1o = x1;
 		this.y1o = y1;
-		System.out.println("A");
+		
 	}
 	
 	@Override
@@ -43,7 +45,9 @@ class DrawThread extends Thread {
 				break;
 			}
 		}
+		// Stop thread once all patches are assigned
 		if (patchID > 99) return;
+		
 		int patchDiv = 10;
 		int patchWidth = screenWidth / patchDiv;
 		int patchHeight = screenHeight / patchDiv;
@@ -71,7 +75,8 @@ class DrawThread extends Thread {
 		//System.out.println("(" + x0 + ", " + y0 + ") ( " + x1 + ", " + y1 + ")");
 		
 		Mandelbrot mandel = new Mandelbrot(patchWidth, patchHeight, x0, x1, y0, y1, max);
-		draw(mandel, graphic, px0, py0, px1, py1);
+		updateMain(mandel, px0, py0, px1, py1, patchID);
+		//draw(mandel, graphic, px0, py0, px1, py1);
 		run();
 	}
 	
@@ -100,6 +105,42 @@ class DrawThread extends Thread {
 					g.setColor(color);
 					g.fillRect(x,y,1,1);
 				}
+			}
+		}
+	}
+	
+	private void updateMain(Mandelbrot mandel, int px0, int py0, int px1, int py1, int patchID) {
+		mandel.calculate();
+		
+		for (int i = 0; i < mandel.screenRoster.length; i++) {
+			omandel.numIterationsPerPixel[mandel.screenRoster[i]]++;
+		}
+		
+		omandel.total += mandel.total;
+		mergeArray(mandel.screenRoster, omandel.screenRoster, px0, py0, px1, py1);
+		
+		boolean remainder = false;
+		for (int i = 0; i < threadPatches.length; i++) {
+			if (threadPatches[i] == false) {
+				remainder = true;
+				break;
+			}
+		}
+		if (!remainder) {
+			// Do something once all patches are completed
+			omandel.drawMandelbrot(graphic);
+		}
+	}
+	
+	private void mergeArray(int[] arraypull, int[] arrayput, int px0, int py0, int px1, int py1) {
+		int xdiff = px1 - px0;
+		int ydiff = py1 - py0;
+		for (int j = 0; j < ydiff; j++) {
+			for (int i = 0; i < xdiff; i++) {
+				int k = convert2Dto1D(i, j, xdiff);
+				int l = convert2Dto1D(px0 + i, py0 + j, screenWidth);
+				
+				arrayput[l] = arraypull[k];
 			}
 		}
 	}

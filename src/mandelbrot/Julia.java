@@ -27,7 +27,7 @@ public class Julia extends JPanel {
 	static int[] numIterationsPerPixel;
 	static double total;
 	
-	static double x0 = -1.5, x1 = 1.5, y0 = -1.5, y1 = 1.5;
+	static double x0 = -1.6, x1 = 1.6, y0 = -1.6, y1 = 1.6;
 	
 	public Julia(Complex _c) {
 		this.c = _c;

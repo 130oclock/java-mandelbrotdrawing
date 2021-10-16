@@ -21,11 +21,13 @@ public class Drawing extends JPanel implements MouseListener {
 	static final int screenHalfHeight = screenHeight/2;
 	static final int screenLength = screenWidth*screenHeight;
 	
-	static int max = 500;
+	static int max = 200;
 	
 	static Mandelbrot mandel;
-	static boolean[] threadPatches;
-	static int numOfCores = 4;
+	/*static boolean[] threadPatches;
+	static int numOfCores = 1;
+	static int patchDiv = 10;
+	static int totalPatches = (patchDiv) * (patchDiv);*/
 	
 	static double x0 = -2, x1 = 2, y0 = -2, y1 = 2; //pattern 0
 	//static double x0 = -0.7092, x1 = -0.712, y0 = 0.24445, y1 = 0.2487; //pattern 1
@@ -49,13 +51,15 @@ public class Drawing extends JPanel implements MouseListener {
 		// Create Mandelbrot
 		mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
 		mandel.drawMandelbrot(drawing.getGraphics());
+		
+		//threadPatches = new boolean[totalPatches];
 		//assignThreads(drawing.getGraphics());
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		//if (mandel != null) mandel.drawMandelbrot(g);
+		if (mandel != null) mandel.drawMandelbrot(g);
 		
 		/*if (mandel != null) {
 			for (int i = 0; i < threadPatches.length; i++) {
@@ -140,13 +144,11 @@ public class Drawing extends JPanel implements MouseListener {
 		mandel.calculate();
 	}
 	
-	// Thread Calculations
+	/*// Thread Calculations
 	public static int[] calculateThreadPatch() {
-		int patchDiv = 10;
 		int patchWidth = screenWidth / patchDiv;
 		int patchHeight = screenHeight / patchDiv;
 		
-		int totalPatches = (patchDiv) * (patchDiv);
 		threadPatches = new boolean[totalPatches];
 		int[] patchXY = new int[totalPatches * 2];
 		
@@ -162,11 +164,15 @@ public class Drawing extends JPanel implements MouseListener {
 	
 	public static void assignThreads(Graphics g) {
 		int[] patches = calculateThreadPatch();
-		//for (int j = 0; j < threadPatches.length; j++) System.out.println(threadPatches[j]);
+		mandel.total = 0;
+		for (int i = 0; i < mandel.numIterationsPerPixel.length; i++) {
+			mandel.numIterationsPerPixel[i] = 0;
+        }
+		//System.out.println(x0 + " " + y0 + " " + x1 + " " + y1);
 		for (int i = 0; i < numOfCores; i++) {
-			new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, x0, y0, x1, y1).start();
+			new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, mandel, x0, y0, x1, y1).start();
 		}
-	}
+	}*/
 	
 	public static double findPercentDiff(int part, int max, double mod) {
 		return ((double)part / (double)max) * mod;
