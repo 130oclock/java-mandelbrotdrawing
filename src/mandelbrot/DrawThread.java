@@ -29,6 +29,7 @@ class DrawThread extends Thread {
 		this.y0o = y0;
 		this.x1o = x1;
 		this.y1o = y1;
+		System.out.println("A");
 	}
 	
 	@Override

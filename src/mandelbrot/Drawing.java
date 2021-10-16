@@ -25,6 +25,7 @@ public class Drawing extends JPanel implements MouseListener {
 	
 	static Mandelbrot mandel;
 	static boolean[] threadPatches;
+	static int numOfCores = 4;
 	
 	static double x0 = -2, x1 = 2, y0 = -2, y1 = 2; //pattern 0
 	//static double x0 = -0.7092, x1 = -0.712, y0 = 0.24445, y1 = 0.2487; //pattern 1
@@ -47,15 +48,21 @@ public class Drawing extends JPanel implements MouseListener {
 		
 		// Create Mandelbrot
 		mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
-		//mandel.drawMandelbrot(drawing.getGraphics());
-		assignThreads(4, drawing.getGraphics());
+		mandel.drawMandelbrot(drawing.getGraphics());
+		//assignThreads(drawing.getGraphics());
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		//if (mandel != null) mandel.drawMandelbrot(g);
-		if (mandel != null) assignThreads(4, g);
+		
+		/*if (mandel != null) {
+			for (int i = 0; i < threadPatches.length; i++) {
+				if (threadPatches[i] == false) return;
+			}
+			assignThreads(g);
+		}*/
     }
 	
 	// Mouse Listener
@@ -153,10 +160,10 @@ public class Drawing extends JPanel implements MouseListener {
 		return patchXY;
 	}
 	
-	public static void assignThreads(int numOfThreads, Graphics g) {
+	public static void assignThreads(Graphics g) {
 		int[] patches = calculateThreadPatch();
-		//for (int j = 0; j < patches.length; j++) System.out.println(patches[j]);
-		for (int i = 0; i < numOfThreads; i++) {
+		//for (int j = 0; j < threadPatches.length; j++) System.out.println(threadPatches[j]);
+		for (int i = 0; i < numOfCores; i++) {
 			new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, x0, y0, x1, y1).start();
 		}
 	}
