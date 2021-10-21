@@ -49,24 +49,24 @@ public class Drawing extends JPanel implements MouseListener {
 		frame.setVisible(true);
 		
 		// Create Mandelbrot
-		mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
-		mandel.drawMandelbrot(drawing.getGraphics());
+		//mandel = new Mandelbrot(screenWidth, screenHeight, x0, x1, y0, y1, max);
+		//mandel.drawMandelbrot(drawing.getGraphics());
 		
-		//threadPatches = new boolean[totalPatches];
-		//assignThreads(drawing.getGraphics());
+		threadPatches = new boolean[totalPatches];
+		assignThreads(drawing.getGraphics());
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (mandel != null) mandel.drawMandelbrot(g);
+		//if (mandel != null) mandel.drawMandelbrot(g);
 		
-		/*if (mandel != null) {
+		if (mandel != null) {
 			for (int i = 0; i < threadPatches.length; i++) {
 				if (threadPatches[i] == false) return;
 			}
 			assignThreads(g);
-		}*/
+		}
     }
 	
 	// Mouse Listener
@@ -144,7 +144,7 @@ public class Drawing extends JPanel implements MouseListener {
 		mandel.calculate();
 	}
 	
-	/*// Thread Calculations
+	// Thread Calculations
 	public static int[] calculateThreadPatch() {
 		int patchWidth = screenWidth / patchDiv;
 		int patchHeight = screenHeight / patchDiv;
@@ -172,7 +172,7 @@ public class Drawing extends JPanel implements MouseListener {
 		for (int i = 0; i < numOfCores; i++) {
 			new DrawThread(screenWidth, screenHeight, max, patches, threadPatches, g, mandel, x0, y0, x1, y1).start();
 		}
-	}*/
+	}
 	
 	public static double findPercentDiff(int part, int max, double mod) {
 		return ((double)part / (double)max) * mod;
